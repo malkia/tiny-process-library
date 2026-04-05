@@ -1,0 +1,24 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+cc_library(
+    name = "tinyproc",
+    hdrs = ["process.hpp"],
+    srcs = ["process.cpp"] +
+    select({
+        "@platforms//os:windows": ["process_win.cpp"],
+        "//conditions:default": ["process_unix.cpp"]
+    }),
+    include_prefix = "tinyproc",
+)
+
+cc_binary(
+    name = "examples",
+    deps = ["tinyproc"],
+    srcs = ["examples.cpp"],
+)
+
+[cc_test(
+    name = "{}_test".format(name),
+    srcs = ["tests/{}_test.cpp".format(name)],
+    deps = ["tinyproc"],
+) for name in ("io", "multithread", "open_close", "path")]
