@@ -9,6 +9,7 @@ cc_library(
         "//conditions:default": ["process_unix.cpp"]
     }),
     include_prefix = "tinyproc",
+    visibility = ["//visibility:public"],
 )
 
 cc_binary(
