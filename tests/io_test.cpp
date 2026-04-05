@@ -33,6 +33,7 @@ int main() {
     assert(ss.str().substr(0, 4) == "Test");
   }
 
+#ifndef _WIN32
   {
     Process process(std::vector<string>{"/bin/echo", "Test"}, "", [output](const char *bytes, size_t n) {
       *output += string(bytes, n);
@@ -50,6 +51,7 @@ int main() {
     assert(output->substr(0, 4) == "Test");
     output->clear();
   }
+#endif
 
   {
     Config config;
@@ -135,6 +137,7 @@ int main() {
     error->clear();
   }
 
+#ifndef _WIN32
   {
     Process process(
         "echo Test && ls an_incorrect_path", "",
@@ -150,7 +153,9 @@ int main() {
     output->clear();
     error->clear();
   }
+#endif
 
+#ifndef _WIN32
   {
     Config config;
     config.on_stdout_close = [eof]() {
@@ -167,6 +172,7 @@ int main() {
     output->clear();
     *eof = 0;
   }
+#endif
 
   {
     Config config;
@@ -185,6 +191,7 @@ int main() {
     *eof = 0;
   }
 
+#ifndef _WIN32
   {
     Config config;
     config.on_stdout_close = [eof]() {
@@ -210,6 +217,7 @@ int main() {
     error->clear();
     *eof = 0;
   }
+#endif
 
   {
     Process process(
@@ -254,6 +262,7 @@ int main() {
     assert(exit_status == 0);
   }
 
+#ifndef _WIN32
   {
     Process process("echo $VAR1 $VAR2", "", {{"VAR1", "value1"}, {"VAR2", "value2"}}, [output](const char *bytes, size_t n) {
       *output += string(bytes, n);
@@ -271,4 +280,5 @@ int main() {
     assert(output->substr(0, 30) == "value1 value2 \"value3 value 4\"");
     output->clear();
   }
+#endif
 }
